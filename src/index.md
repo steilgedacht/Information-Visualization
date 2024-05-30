@@ -22,6 +22,8 @@ const Language = view(Inputs.button([
   ["Italian", value => "it"],  
   ["Spanish", value => "es"]
 ], {value: "en", Language: "Counter"}));
+
+const colors = view(Inputs.select(["noun", "verb", "adjec", "pronoun", "article", "black", "blanchedalmond", "blue", "blueviolet"], {multiple: 4, label: "Filter tags"}));
 ```
 
 <!-- Load and transform the data -->
