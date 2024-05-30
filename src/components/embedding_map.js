@@ -1,15 +1,35 @@
 import Plotly from 'plotly.js-dist-min';
 
 export function embedding_map(data, { width = 700 } = {}) {
+
+  const getColor = (language) => {
+    const colorMap = {
+      'en': '#ff6384',
+      'es': '#36a2eb',
+      'fr': '#ffcd56',
+      'de': '#4bc0c0',
+      'pt': '#9966ff',
+      'it': '#668722'
+    };
+    return colorMap[language] || '#cccccc'; // Default color if language is not found
+  };
+  
+
   const trace = {
     x: data.map(d => d.position[0]),
     y: data.map(d => d.position[1]),
     text: data.map(d => d.word),
-    mode: 'markers',
+    mode: 'markers+text',
     type: 'scattergl',
     marker: {
-      size: 3
+      size: 3,
+      color: data.map(d => getColor(d.language))
     },
+    textposition: 'top center', 
+    textfont: {
+      size: 12,
+      color: "#0000"
+    }
   };
 
   const layout = {
@@ -39,7 +59,15 @@ export function embedding_map(data, { width = 700 } = {}) {
 
   Plotly.newPlot('plotly-chart', [trace], layout, config);
 
-  // Add click event listener
+
+  document.getElementById('plotly-chart').on('plotly_relayout', function(eventData) {
+    // Determine the opacity based on the x-axis range
+    const xRange = Math.abs(eventData['xaxis.range[1]'] - eventData['xaxis.range[0]']);
+    const opacity = Math.pow(1 - (xRange / 15), 16); // Inverse relationship between range and opacity
+
+    Plotly.restyle('plotly-chart', { 'textfont.color': `rgba(255, 255, 255, ${Math.max(0.0, Math.min(opacity, 1))})` });
+  });
+  
   document.getElementById('plotly-chart').on('plotly_click', function(eventData) {
     const pointIndex = eventData.points[0].pointIndex;
     const pointData = data[pointIndex];

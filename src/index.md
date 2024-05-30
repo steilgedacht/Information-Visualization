@@ -29,7 +29,7 @@ const colors = view(Inputs.select(["noun", "verb", "adjec", "pronoun", "article"
 <!-- Load and transform the data -->
 
 ```js
-const data = FileAttachment("./data/vocabulary_dataset_small.json").json();
+const data = FileAttachment("./data/vocabulary_dataset.json").json();
 ```
 
 <div class="grid grid-cols-3">
