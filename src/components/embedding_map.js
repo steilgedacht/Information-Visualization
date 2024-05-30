@@ -17,7 +17,6 @@ export function embedding_map(data, { width = 700 } = {}) {
     height: 700,
     plot_bgcolor: '#1e1e1e',
     paper_bgcolor: '#1e1e1e',
-
     xaxis: {
       range: [Math.min(...data.map(d => d.position[0])), Math.max(...data.map(d => d.position[0]))]
     },
@@ -39,4 +38,22 @@ export function embedding_map(data, { width = 700 } = {}) {
   };
 
   Plotly.newPlot('plotly-chart', [trace], layout, config);
+
+  // Add click event listener
+  document.getElementById('plotly-chart').on('plotly_click', function(eventData) {
+    const pointIndex = eventData.points[0].pointIndex;
+    const pointData = data[pointIndex];
+    displaySidePanel(pointData);
+  });
+}
+
+// Function to display information in the side panel
+function displaySidePanel(pointData) {
+  const sidePanel = document.getElementById('side-panel');
+  sidePanel.innerHTML = `
+    <h3>Point Information</h3>
+    <p><strong>Word:</strong> ${pointData.word}</p>
+    <p><strong>Position:</strong> (${pointData.position[0]}, ${pointData.position[1]})</p>
+    <!-- Add more information here if needed -->
+  `;
 }

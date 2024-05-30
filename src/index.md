@@ -11,8 +11,17 @@ toc: false
 ```js
 import {embedding_map} from "./components/embedding_map.js";
 import {table_plot} from "./components/debugging.js";
-// const language = FileAttachment("./data/language_small.csv").csv({typed: true});
+import {side_panel} from "./components/side_panel.js";
 
+// const language = FileAttachment("./data/language_small.csv").csv({typed: true});
+const Language = view(Inputs.button([
+  ["English", value => "en"],
+  ["German", value => "de"],
+  ["Portugues", value => "pt"],
+  ["French", value => "fr"],
+  ["Italian", value => "it"],  
+  ["Spanish", value => "es"]
+], {value: "en", Language: "Counter"}));
 ```
 
 <!-- Load and transform the data -->
@@ -21,20 +30,11 @@ import {table_plot} from "./components/debugging.js";
 const data = FileAttachment("./data/vocabulary_dataset_small.json").json();
 ```
 
-<!-- A shared color scale for consistency, sorted by the number of launches -->
-<!-- 
-```js
-const color = Plot.scale({
-  color: {
-    type: "categorical",
-    domain: d3.groupSort(launches, (D) => -D.length, (d) => d.state).filter((d) => d !== "Other"),
-    unknown: "var(--theme-foreground-muted)"
-  }
-});
-``` -->
-<h1>Lanugage Learning</h1>
-<div class="grid grid-cols-1">
+<div class="grid grid-cols-2">
   <div class="card" id="plotly-chart">
     ${resize((width) => embedding_map(data, {width}))}
+  </div>
+  <div class="card" id="side-panel">
+    <p></p>
   </div>
 </div>
