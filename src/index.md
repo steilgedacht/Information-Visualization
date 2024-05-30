@@ -32,8 +32,8 @@ const colors = view(Inputs.select(["noun", "verb", "adjec", "pronoun", "article"
 const data = FileAttachment("./data/vocabulary_dataset_small.json").json();
 ```
 
-<div class="grid grid-cols-2">
-  <div class="card" id="plotly-chart">
+<div class="grid grid-cols-3">
+  <div class="card grid-colspan-2" id="plotly-chart">
     ${resize((width) => embedding_map(data, {width}))}
   </div>
   <div class="card" id="side-panel">
