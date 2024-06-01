@@ -42,24 +42,21 @@ const data = FileAttachment("./data/vocabulary_dataset.json").json();
     <label><input type="checkbox" class="language-filter" value="it" checked> Italian</label>
   </div>
   <div>
-    <label for="category-filter">Select Categories:</label>
-    <select id="category-filter" multiple>
-      <option value="n">n</option>
-      <option value="sg">sg</option>
-      <option value="vblex">vblex</option>
-      <option value="pri">pri</option>
-      <option value="p3">p3</option>
-      <option value="pl">pl</option>
-      <option value="*numb">*numb</option>
-      <option value="*pers">*pers</option>
-      <option value="inf">inf</option>
-      <option value="f">f</option>
-      <option value="adj">adj</option>
-      <option value="m">m</option>
-      <option value="mf">mf</option>
-      <option value="*gndr">*gndr</option>
-      <option value="nom">nom</option>
-    </select>
+    <label><input type="checkbox" class="category-filter" value="n"> n</label>
+    <label><input type="checkbox" class="category-filter" value="sg"> sg</label>
+    <label><input type="checkbox" class="category-filter" value="vblex"> vblex</label>
+    <label><input type="checkbox" class="category-filter" value="pri"> pri</label>
+    <label><input type="checkbox" class="category-filter" value="p3"> p3</label>
+    <label><input type="checkbox" class="category-filter" value="pl"> pl</label>
+    <label><input type="checkbox" class="category-filter" value="*numb"> *numb</label>
+    <label><input type="checkbox" class="category-filter" value="*pers"> *pers</label>
+    <label><input type="checkbox" class="category-filter" value="inf"> inf</label>
+    <label><input type="checkbox" class="category-filter" value="f"> f</label>
+    <label><input type="checkbox" class="category-filter" value="adj"> adj</label>
+    <label><input type="checkbox" class="category-filter" value="m"> m</label>
+    <label><input type="checkbox" class="category-filter" value="mf"> mf</label>
+    <label><input type="checkbox" class="category-filter" value="*gndr"> *gndr</label>
+    <label><input type="checkbox" class="category-filter" value="nom"> nom</label>
   </div>
 </div>
 

@@ -13,11 +13,6 @@ export function embedding_map(data, { width = 700 } = {}) {
     };
     return colorMap[language] || '#cccccc';
   };
-  
-  const parseCategories = (categoriesString) => {
-    // Assuming the categories are separated by commas or spaces
-    return categoriesString.split(/[, ]+/).map(category => category.trim());
-  };
 
   const createTrace = (filteredData) => {
     return {
@@ -63,10 +58,9 @@ export function embedding_map(data, { width = 700 } = {}) {
     responsive: true
   };
 
-
   const updatePlot = () => {
     const selectedLanguages = Array.from(document.querySelectorAll('.language-filter:checked')).map(el => el.value);
-    const selectedCategories = Array.from(document.getElementById('category-filter').selectedOptions).map(option => option.value);
+    const selectedCategories = Array.from(document.querySelectorAll('.category-filter:checked')).map(el => el.value);
 
     const filteredData = data.filter(d =>
       selectedLanguages.includes(d.language) &&
@@ -77,9 +71,6 @@ export function embedding_map(data, { width = 700 } = {}) {
     Plotly.react('plotly-chart', [trace], layout, config);
   };
 
-  document.querySelectorAll('#category-filter option').forEach(option => {
-    option.selected = true;
-  });
 
   updatePlot();
 
@@ -96,12 +87,9 @@ export function embedding_map(data, { width = 700 } = {}) {
     displaySidePanel(pointData);
   });
 
-  document.querySelectorAll('.language-filter').forEach(filter => {
+  document.querySelectorAll('.language-filter, .category-filter').forEach(filter => {
     filter.addEventListener('change', updatePlot);
   });
-
-  document.getElementById('category-filter').addEventListener('change', updatePlot);
-
 }
 
 // Function to display information in the side panel
