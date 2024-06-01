@@ -2,45 +2,60 @@ import * as Plot from "npm:@observablehq/plot";
 import * as d3 from "d3";
 
 export function embedding_map(data, {width} = {}) {
-  // Create the plot
-  const plot = Plot.plot({
-    title: "Vocabulary Cloud",
-    width,
-    height: 700,
-    marks: [
-      Plot.dot(data, {x: d => d.position[0], y: d => d.position[1], title: "word"})
-    ]
-  });
+  const getColor = (language) => {
+    const colorMap = {
+      'en': '#ff6384',
+      'es': '#36a2eb',
+      'fr': '#ffcd56',
+      'de': '#4bc0c0',
+      'pt': '#9966ff',
+      'it': '#668722'
+    };
+    return colorMap[language] || '#cccccc';
+  };
 
-  // Create a container for the plot and the zoomable group
-  const container = document.createElement("div");
-  container.appendChild(plot);
+  // Calculate domain for x and y
+  const xDomain = d3.extent(data, d => d.position[0]);
+  const yDomain = d3.extent(data, d => d.position[1]);
 
-  // Select the SVG element
-  const svg = d3.select(container).select("svg");
-  
-  // Create a 'g' element to contain all plot elements
-  const g = svg.append("g").attr("class", "plot-content");
+  // Create scales
+  const xScale = d3.scaleLinear().domain(xDomain).range([0, width]);
+  const yScale = d3.scaleLinear().domain(yDomain).range([700, 0]); // height is 700
 
-  // Move all existing children of the svg into the new 'g' element
-  svg.selectAll(":scope > *:not(.plot-content)").each(function() {
-    g.node().appendChild(this);
-  });
+  // Create the SVG element
+  const svg = d3.create("svg")
+    .attr("viewBox", [0, 0, width, 700])  // Set viewBox for responsive scaling
+    .attr("width", width)
+    .attr("height", 700);
 
-  // Create a zoom behavior
+  // Create groups for grid and dots
+  const gDot = svg.append("g").attr("fill", "none").attr("stroke-linecap", "round");
+
+  // Append dots to the group
+  gDot.selectAll("circle")
+    .data(data)
+    .join("circle")
+      .attr("cx", d => xScale(d.position[0]))
+      .attr("cy", d => yScale(d.position[1]))
+      .attr("r", 1)
+      .attr("fill", d => getColor(d.language))
+      .attr("stroke", d => getColor(d.language));
+
+  // Create zoom behavior
   const zoom = d3.zoom()
-      .scaleExtent([1, 20])  // Define the zoom scale
-      .on("zoom", handleZoom);
+      .scaleExtent([1, 20])
+      .on("zoom", zoomed);
 
-  // Function to handle zoom events
-  function handleZoom(event) {
-    g.attr("transform", event.transform);
-    g.selectAll("circle").attr("r", d => Math.max(0.1 / event.transform.k, 2));  // Adjust the radius
-  }
-
-  // Apply the zoom behavior to the SVG container
   svg.call(zoom);
 
-  // Return the container element
-  return container;
+  function zoomed(event) {
+    const transform = event.transform;
+    gDot.attr("transform", transform).attr("stroke-width", 5 / transform.k);
+  }
+
+  // Append the SVG element to the body or a specific element
+  document.body.appendChild(svg.node());
+
+  // Return the SVG node for further manipulation if needed
+  return svg.node();
 }
