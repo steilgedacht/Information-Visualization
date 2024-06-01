@@ -11,25 +11,31 @@ export function embedding_map(data, { width = 700 } = {}) {
       'pt': '#9966ff',
       'it': '#668722'
     };
-    return colorMap[language] || '#cccccc'; // Default color if language is not found
+    return colorMap[language] || '#cccccc';
   };
   
+  const parseCategories = (categoriesString) => {
+    // Assuming the categories are separated by commas or spaces
+    return categoriesString.split(/[, ]+/).map(category => category.trim());
+  };
 
-  const trace = {
-    x: data.map(d => d.position[0]),
-    y: data.map(d => d.position[1]),
-    text: data.map(d => d.word),
-    mode: 'markers+text',
-    type: 'scattergl',
-    marker: {
-      size: 3,
-      color: data.map(d => getColor(d.language))
-    },
-    textposition: 'top center', 
-    textfont: {
-      size: 12,
-      color: "#0000"
-    }
+  const createTrace = (filteredData) => {
+    return {
+      x: filteredData.map(d => d.position[0]),
+      y: filteredData.map(d => d.position[1]),
+      text: filteredData.map(d => d.word),
+      mode: 'markers+text',
+      type: 'scattergl',
+      marker: {
+        size: 3,
+        color: filteredData.map(d => getColor(d.language))
+      },
+      textposition: 'top center', 
+      textfont: {
+        size: 12,
+        color: "#0000"
+      }
+    };
   };
 
   const layout = {
@@ -57,11 +63,27 @@ export function embedding_map(data, { width = 700 } = {}) {
     responsive: true
   };
 
-  Plotly.newPlot('plotly-chart', [trace], layout, config);
 
+  const updatePlot = () => {
+    const selectedLanguages = Array.from(document.querySelectorAll('.language-filter:checked')).map(el => el.value);
+    const selectedCategories = Array.from(document.getElementById('category-filter').selectedOptions).map(option => option.value);
+
+    const filteredData = data.filter(d =>
+      selectedLanguages.includes(d.language) &&
+      selectedCategories.every(category => d.lexeme.includes(category))
+    );
+
+    const trace = createTrace(filteredData);
+    Plotly.react('plotly-chart', [trace], layout, config);
+  };
+
+  document.querySelectorAll('#category-filter option').forEach(option => {
+    option.selected = true;
+  });
+
+  updatePlot();
 
   document.getElementById('plotly-chart').on('plotly_relayout', function(eventData) {
-    // Determine the opacity based on the x-axis range
     const xRange = Math.abs(eventData['xaxis.range[1]'] - eventData['xaxis.range[0]']);
     const opacity = Math.pow(1 - (xRange / 15), 16); // Inverse relationship between range and opacity
 
@@ -73,6 +95,13 @@ export function embedding_map(data, { width = 700 } = {}) {
     const pointData = data[pointIndex];
     displaySidePanel(pointData);
   });
+
+  document.querySelectorAll('.language-filter').forEach(filter => {
+    filter.addEventListener('change', updatePlot);
+  });
+
+  document.getElementById('category-filter').addEventListener('change', updatePlot);
+
 }
 
 // Function to display information in the side panel
