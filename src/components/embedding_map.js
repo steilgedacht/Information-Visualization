@@ -5,12 +5,12 @@ export function embedding_map(data, { width = 700 } = {}) {
 
   const getColor = (language) => {
     const colorMap = {
-      'en': '#ff6384',
-      'es': '#36a2eb',
-      'fr': '#ffcd56',
-      'de': '#4bc0c0',
-      'pt': '#9966ff',
-      'it': '#668722'
+      'en': '#914896',
+      'es': '#f0ca44',
+      'fr': '#5e5ee3',
+      'de': '#ff7600',
+      'pt': '#f04544',
+      'it': '#63dc4a'
     };
     return colorMap[language] || '#cccccc';
   };
@@ -31,7 +31,8 @@ export function embedding_map(data, { width = 700 } = {}) {
         size: 12,
         color: "#0000"
       },
-      customdata: filteredData.map(d => ({custom_id: d.custom_id}))
+      customdata: filteredData.map(d => ({custom_id: d.custom_id})),
+      hovertemplate: '<b>%{text}</b><extra></extra>'
     };
   };
 
@@ -85,7 +86,6 @@ export function embedding_map(data, { width = 700 } = {}) {
   
   document.getElementById('plotly-chart').on('plotly_click', function(eventData) {
     const pointIndex = eventData.points[0].customdata.custom_id;
-    console.log(eventData.points[0]);
     const pointData = data[pointIndex];
     displaySidePanel(pointData);
   });
