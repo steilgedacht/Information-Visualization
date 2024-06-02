@@ -1,4 +1,5 @@
 import Plotly from 'plotly.js-dist-min';
+import * as Plot from "npm:@observablehq/plot";
 
 export function embedding_map(data, { width = 700 } = {}) {
 
@@ -29,7 +30,8 @@ export function embedding_map(data, { width = 700 } = {}) {
       textfont: {
         size: 12,
         color: "#0000"
-      }
+      },
+      customdata: filteredData.map(d => ({custom_id: d.custom_id}))
     };
   };
 
@@ -64,7 +66,7 @@ export function embedding_map(data, { width = 700 } = {}) {
 
     const filteredData = data.filter(d =>
       selectedLanguages.includes(d.language) &&
-      selectedCategories.every(category => d.lexeme.includes(category))
+      selectedCategories.every(category => d.lexeme.includes("<"+category+">"))
     );
 
     const trace = createTrace(filteredData);
@@ -82,7 +84,8 @@ export function embedding_map(data, { width = 700 } = {}) {
   });
   
   document.getElementById('plotly-chart').on('plotly_click', function(eventData) {
-    const pointIndex = eventData.points[0].pointIndex;
+    const pointIndex = eventData.points[0].customdata.custom_id;
+    console.log(eventData.points[0]);
     const pointData = data[pointIndex];
     displaySidePanel(pointData);
   });
@@ -96,9 +99,8 @@ export function embedding_map(data, { width = 700 } = {}) {
 function displaySidePanel(pointData) {
   const sidePanel = document.getElementById('side-panel');
   sidePanel.innerHTML = `
-    <h3>Point Information</h3>
-    <p><strong>Word:</strong> ${pointData.word}</p>
-    <p><strong>Position:</strong> (${pointData.position[0]}, ${pointData.position[1]})</p>
-    <!-- Add more information here if needed -->
-  `;
+    <h1>${pointData.word}</h1> 
+    <p style="float:right;">${pointData.language}</p>
+    <p>${pointData.lexeme.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>
+    `;
 }
