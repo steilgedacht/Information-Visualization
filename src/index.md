@@ -12,6 +12,7 @@ toc: false
 import {embedding_map, updatePlot} from "./components/embedding_map.js";
 import {table_plot} from "./components/debugging.js";
 import {side_panel} from "./components/side_panel.js";
+import {barChart} from "./components/language_distribution.js";
 
 // const language = FileAttachment("./data/language_small.csv").csv({typed: true});
 // const Language = view(Inputs.button([
@@ -287,12 +288,8 @@ const data = FileAttachment("./data/vocabulary_dataset.json").json();
   </div>
   <div class="card">
     <h3>Word Information</h3>
-    <div>
-      ${Plot.plot({
-      marks: [
-        Plot.barY(alphabet, {x: "letter", y: "frequency"})
-      ]
-    })}
+    <div id="bar-chart">
+      ${resize((width) => barChart(data, {width}))}
     </div>
   </div>  
   <div class="card">
