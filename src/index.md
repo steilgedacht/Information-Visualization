@@ -273,9 +273,12 @@ const data = FileAttachment("./data/vocabulary_dataset.json").json();
       </div>
       <div><br>
         <h3>Size by</h3>
-        <select style="width:100%" id="choices" name="choices">
+        <select style="width:100%" id="sizeBy" name="sizeBy">
           <option value="none">None</option>
-          <option value="category">Category occurences</option>
+          <option value="average_performance">Performance</option>
+          <option value="average_recall">Recall</option>
+          <option value="users_seen">Users that have seen the word</option>
+          <option value="hardness">Hardness</option>
         </select>
       </div>      
     </div>
@@ -293,6 +296,6 @@ const data = FileAttachment("./data/vocabulary_dataset.json").json();
     </div>
   </div>  
   <div class="card">
-    <h3>Spaced Repetition Information</h3>
+    <h3>Word Comparison</h3>
   </div>  
 </div>

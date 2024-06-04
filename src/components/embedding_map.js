@@ -15,7 +15,22 @@ export function embedding_map(data, { width = 700 } = {}) {
     return colorMap[language] || '#cccccc';
   };
 
-  const createTrace = (filteredData) => {
+  const getSizeMapping = (d, sizeBy) => {
+    switch(sizeBy) {
+      case 'users_seen':
+        return 2 * Math.log2(d.users_seen);
+      case 'average_performance':
+        return Math.max(Math.pow(d.average_performance, 2) * 10, 1)
+      case 'average_recall':
+        return Math.max(Math.pow(d.average_recall, 2)*10, 1)
+      case 'hardness':
+        return 3/Math.pow(d.average_performance, 2) 
+      default:
+        return 3;
+    }
+  };  
+
+  const createTrace = (filteredData, sizeBy) => {
     return {
       x: filteredData.map(d => d.position[0]),
       y: filteredData.map(d => d.position[1]),
@@ -23,7 +38,7 @@ export function embedding_map(data, { width = 700 } = {}) {
       mode: 'markers+text',
       type: 'scattergl',
       marker: {
-        size: 3,
+        size: filteredData.map(d => getSizeMapping(d, sizeBy)),
         color: filteredData.map(d => getColor(d.language))
       },
       textposition: 'top center', 
@@ -64,13 +79,14 @@ export function embedding_map(data, { width = 700 } = {}) {
   const updatePlot = () => {
     const selectedLanguages = Array.from(document.querySelectorAll('.language-filter:checked')).map(el => el.value);
     const selectedCategories = Array.from(document.querySelectorAll('.category-filter:checked')).map(el => el.value);
+    const sizeBy = document.getElementById('sizeBy').value;
 
     const filteredData = data.filter(d =>
       selectedLanguages.includes(d.language) &&
       selectedCategories.every(category => d.lexeme.includes("<"+category+">"))
     );
 
-    const trace = createTrace(filteredData);
+    const trace = createTrace(filteredData, sizeBy);
     Plotly.react('plotly-chart', [trace], layout, config);
   };
 
@@ -93,14 +109,30 @@ export function embedding_map(data, { width = 700 } = {}) {
   document.querySelectorAll('.language-filter, .category-filter').forEach(filter => {
     filter.addEventListener('change', updatePlot);
   });
+
+  document.getElementById('sizeBy').addEventListener('change', updatePlot);
 }
 
 // Function to display information in the side panel
 function displaySidePanel(pointData) {
   const sidePanel = document.getElementById('side-panel');
+  
+  let tag_string = "";
+  for(let i=0; i<=pointData.tags.length; i++) {
+    if (pointData.tags[i] == undefined) {continue;} 
+    tag_string += '<b style="background: white;color: #504b4b;padding: 4px 8px;border-radius: 50px;margin-right: 4px;" >' + pointData.tags[i].replace(/</g, "").replace(/>/g, "") + "</b>";
+  }
+  
   sidePanel.innerHTML = `
     <h1>${pointData.word}</h1> 
     <p style="float:right;">${pointData.language}</p>
-    <p>${pointData.lexeme.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>
+    <p>${pointData.full_word}</p>
+    <p>${tag_string}</p>
+    <br>
+    <h3>Users that saw the word</h3>
+    <h1>${pointData.users_seen}</h1>
+    <br>
+    <h3>Average Performance of the word</h3>
+    <h1>${Math.round(pointData.average_performance*1000)/1000}</h1>
     `;
 }
