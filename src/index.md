@@ -281,6 +281,8 @@ const data = FileAttachment("./data/vocabulary_dataset.json").json();
           <option value="hardness">Hardness</option>
         </select>
       </div>      
+      <label for="search">Search:</label>
+      <input type="text" id="search" placeholder="Enter word to search...">
     </div>
   </div>
 </div>

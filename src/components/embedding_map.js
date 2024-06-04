@@ -15,7 +15,11 @@ export function embedding_map(data, { width = 700 } = {}) {
     return colorMap[language] || '#cccccc';
   };
 
-  const getSizeMapping = (d, sizeBy) => {
+  const getSizeMapping = (d, sizeBy, searchTerm) => {
+    if (searchTerm && d.word.toLowerCase() === searchTerm.toLowerCase()) {
+      return 50; 
+    }
+
     switch(sizeBy) {
       case 'users_seen':
         return 2 * Math.log2(d.users_seen);
@@ -30,7 +34,7 @@ export function embedding_map(data, { width = 700 } = {}) {
     }
   };  
 
-  const createTrace = (filteredData, sizeBy) => {
+  const createTrace = (filteredData, sizeBy, searchTerm) => {
     return {
       x: filteredData.map(d => d.position[0]),
       y: filteredData.map(d => d.position[1]),
@@ -38,7 +42,7 @@ export function embedding_map(data, { width = 700 } = {}) {
       mode: 'markers+text',
       type: 'scattergl',
       marker: {
-        size: filteredData.map(d => getSizeMapping(d, sizeBy)),
+        size: filteredData.map(d => getSizeMapping(d, sizeBy, searchTerm)),
         color: filteredData.map(d => getColor(d.language))
       },
       textposition: 'top center', 
@@ -65,7 +69,7 @@ export function embedding_map(data, { width = 700 } = {}) {
     margin: {
       l: 0,
       r: 0,
-      t: 20, // Leave some space for the title
+      t: 20,
       b: 0
     }
   };
@@ -80,14 +84,24 @@ export function embedding_map(data, { width = 700 } = {}) {
     const selectedLanguages = Array.from(document.querySelectorAll('.language-filter:checked')).map(el => el.value);
     const selectedCategories = Array.from(document.querySelectorAll('.category-filter:checked')).map(el => el.value);
     const sizeBy = document.getElementById('sizeBy').value;
+    const searchTerm = document.getElementById('search').value.trim();
 
     const filteredData = data.filter(d =>
       selectedLanguages.includes(d.language) &&
       selectedCategories.every(category => d.lexeme.includes("<"+category+">"))
     );
 
-    const trace = createTrace(filteredData, sizeBy);
+    const trace = createTrace(filteredData, sizeBy, searchTerm);
     Plotly.react('plotly-chart', [trace], layout, config);
+
+    if (searchTerm) {
+      const matchedData = filteredData.find(d => d.word.toLowerCase() === searchTerm.toLowerCase());
+      if (matchedData) {
+        const event = new CustomEvent('plotly_click', { detail: { points: [{ customdata: { custom_id: matchedData.custom_id } }] } });
+        document.getElementById('plotly-chart').dispatchEvent(event);
+      }
+    }
+
   };
 
 
@@ -111,6 +125,7 @@ export function embedding_map(data, { width = 700 } = {}) {
   });
 
   document.getElementById('sizeBy').addEventListener('change', updatePlot);
+  document.getElementById('search').addEventListener('input', updatePlot);
 }
 
 // Function to display information in the side panel
