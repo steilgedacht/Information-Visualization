@@ -1,0 +1,16 @@
+@import url("observablehq:default.css");
+@import url("observablehq:theme-coffee.css");
+
+:root {
+  --theme-foreground-focus: green;
+}
+
+
+#word_comparison > div > div:nth-child(1) > * {
+    text-align: right;
+}
+
+#word_comparison .no_compare{
+    text-align: right;
+
+}

@@ -30,7 +30,7 @@ export function embedding_map(data, { width = 700 } = {}) {
       case 'hardness':
         return 3/Math.pow(d.average_performance, 2) 
       default:
-        return 3;
+        return 5;
     }
   };  
 
@@ -134,6 +134,9 @@ export function embedding_map(data, { width = 700 } = {}) {
 function displaySidePanel(pointData) {
   const sidePanel = document.getElementById('side-panel');
   
+  let word_comparison_old = document.getElementById('side-panel').innerHTML;
+
+
   let tag_string = "";
   for(let i=0; i<=pointData.tags.length; i++) {
     if (pointData.tags[i] == undefined) {continue;} 
@@ -142,7 +145,7 @@ function displaySidePanel(pointData) {
   
   sidePanel.innerHTML = `
     <h1>${pointData.word}</h1> 
-    <p style="float:right;">${pointData.language}</p>
+    <p style="float:right;" class="no_compare">${pointData.language}</p>
     <p>${pointData.full_word}</p>
     <p>${tag_string}</p>
     <br>
@@ -152,4 +155,13 @@ function displaySidePanel(pointData) {
     <h3>Average Performance of the word</h3>
     <h1>${Math.round(pointData.average_performance*1000)/1000}</h1>
     `;
+
+  let word_comparison_new = document.getElementById('side-panel').innerHTML;
+  const word_comparson = document.getElementById('word_comparison');
+  word_comparson.innerHTML = `<div style="display: flex;"><div style="flex-basis: 50%;margin: 5px;">${word_comparison_old}</div><div style="flex-basis: 50%;margin: 5px;">${word_comparison_new}</div></div>`;
+  
+
+
+
+
 }

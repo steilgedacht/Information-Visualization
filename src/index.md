@@ -2,6 +2,7 @@
 theme: dashboard
 title: Language Learning
 toc: false
+style: custom-style.css
 ---
 
 # Language Learning
@@ -13,6 +14,8 @@ import {embedding_map, updatePlot} from "./components/embedding_map.js";
 import {table_plot} from "./components/debugging.js";
 import {side_panel} from "./components/side_panel.js";
 import {barChart} from "./components/language_distribution.js";
+import {barChart_categories} from "./components/category_distribution.js";
+import {barChart_categories_all} from "./components/category_global_distribution.js";
 
 // const language = FileAttachment("./data/language_small.csv").csv({typed: true});
 // const Language = view(Inputs.button([
@@ -300,6 +303,21 @@ const data = FileAttachment("./data/vocabulary_dataset.json").json();
     </div>
   </div>  
   <div class="card">
-    <h3>Word Comparison</h3>
+    <h3>Category Distribution</h3>
+    <div id="bar-chart-cat">
+      ${resize((width) => barChart_categories(data, {width}))}
+    </div>      
   </div>  
 </div>
+<div class="grid grid-cols-3" >
+  <div class="card">
+    <div id="bar-chart-cat-all">
+      ${resize((width) => barChart_categories_all(data, {width}))}
+    </div>      
+  </div>
+  <div class="card grid-colspan-2">
+  <h3>Word Comparison</h3>
+    <div id="word_comparison">
+    </div>
+  </div>    
+</div>  
