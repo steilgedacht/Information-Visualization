@@ -97,11 +97,9 @@ export function embedding_map(data, { width = 700 } = {}) {
     if (searchTerm) {
       const matchedData = filteredData.find(d => d.word.toLowerCase() === searchTerm.toLowerCase());
       if (matchedData) {
-        const event = new CustomEvent('plotly_click', { detail: { points: [{ customdata: { custom_id: matchedData.custom_id } }] } });
-        document.getElementById('plotly-chart').dispatchEvent(event);
+        displaySidePanel(matchedData);
       }
     }
-
   };
 
 
@@ -125,7 +123,11 @@ export function embedding_map(data, { width = 700 } = {}) {
   });
 
   document.getElementById('sizeBy').addEventListener('change', updatePlot);
-  document.getElementById('search').addEventListener('input', updatePlot);
+  document.getElementById('search').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      updatePlot();
+    }
+  });
 }
 
 // Function to display information in the side panel

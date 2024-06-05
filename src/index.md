@@ -40,6 +40,10 @@ const data = FileAttachment("./data/vocabulary_dataset.json").json();
   </div>
   <div class="card">
     <h2>Filters</h2><br>
+    <div>
+      <label for="search">Search:</label>
+      <input type="text" id="search" placeholder="Enter word to search...">
+    </div><br>
     <div id="filters">
       <h3>Language</h3>
       <div>
@@ -52,7 +56,7 @@ const data = FileAttachment("./data/vocabulary_dataset.json").json();
       </div>
       <br>
       <h3>Categories</h3>
-      <div style="height:300px; overflow-y:scroll;">
+      <div style="height:200px; overflow-y:scroll;">
         <div style="margin-bottom:5px"><label><input type="checkbox" class="category-filter" value="n"> Noun</label></div>
         <div style="margin-bottom:5px"><label><input type="checkbox" class="category-filter" value="sg"> sg</label></div>
         <div style="margin-bottom:5px"><label><input type="checkbox" class="category-filter" value="*numb"> *numb</label></div>
@@ -281,8 +285,6 @@ const data = FileAttachment("./data/vocabulary_dataset.json").json();
           <option value="hardness">Hardness</option>
         </select>
       </div>      
-      <label for="search">Search:</label>
-      <input type="text" id="search" placeholder="Enter word to search...">
     </div>
   </div>
 </div>
