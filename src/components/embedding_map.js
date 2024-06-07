@@ -43,7 +43,8 @@ export function embedding_map(data, { width = 700 } = {}) {
       type: 'scattergl',
       marker: {
         size: filteredData.map(d => getSizeMapping(d, sizeBy, searchTerm)),
-        color: filteredData.map(d => getColor(d.language))
+        color: filteredData.map(d => getColor(d.language)),
+        line: { width: 0 }
       },
       textposition: 'top center', 
       textfont: {
@@ -158,7 +159,7 @@ function displaySidePanel(pointData) {
 
   let word_comparison_new = document.getElementById('side-panel').innerHTML;
   const word_comparson = document.getElementById('word_comparison');
-  word_comparson.innerHTML = `<div style="display: flex;"><div style="flex-basis: 50%;margin: 5px;">${word_comparison_old}</div><div style="flex-basis: 50%;margin: 5px;">${word_comparison_new}</div></div>`;
+  word_comparson.innerHTML = `<div style="display: flex;"><div style="flex-basis: 50%;margin: 5px;">${word_comparison_new}</div><div style="flex-basis: 50%;margin: 5px;">${word_comparison_old}</div></div>`;
   
 
 

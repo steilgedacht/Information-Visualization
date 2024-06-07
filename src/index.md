@@ -2,7 +2,6 @@
 theme: dashboard
 title: Language Learning
 toc: false
-style: custom-style.css
 ---
 
 # Language Learning
@@ -272,10 +271,11 @@ const data = FileAttachment("./data/vocabulary_dataset.json").json();
         <div style="margin-bottom:5px"><label><input type="checkbox" class="category-filter" value="@pr:au_dela_de"> @pr:au_dela_de</label></div>
       </div>
       <div><br>
-        <h3>Color by</h3> 
+        <h3>Projection method</h3> 
         <select style="width:100%" id="choices" name="choices">
-          <option value="language">Language</option>
-          <option value="category">Category</option>
+          <option value="bertbase">Bert-base</option>
+          <option value="multilingual">Bert-multilanguage</option>
+          <option value="clusters">Clusters</option>
         </select>
       </div>
       <div><br>

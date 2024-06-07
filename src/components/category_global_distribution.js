@@ -58,6 +58,5 @@ export function barChart_categories_all(data, { width = 700 } = {}) {
     filter.addEventListener('change', updateChart);
   });
 
-  // Initial chart rendering
   updateChart();
 }
