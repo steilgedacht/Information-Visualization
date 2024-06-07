@@ -34,10 +34,11 @@ export function embedding_map(data, { width = 700 } = {}) {
     }
   };  
 
-  const createTrace = (filteredData, sizeBy, searchTerm) => {
+  const createTrace = (filteredData, sizeBy, searchTerm, embeddingType) => {
+    console.log(`position_${embeddingType}`);
     return {
-      x: filteredData.map(d => d.position[0]),
-      y: filteredData.map(d => d.position[1]),
+      x: filteredData.map(d => d[`position_${embeddingType}`][0]),
+      y: filteredData.map(d => d[`position_${embeddingType}`][1]),
       text: filteredData.map(d => d.word),
       mode: 'markers+text',
       type: 'scattergl',
@@ -61,12 +62,6 @@ export function embedding_map(data, { width = 700 } = {}) {
     height: 700,
     plot_bgcolor: '#1e1e1e',
     paper_bgcolor: '#1e1e1e',
-    xaxis: {
-      range: [Math.min(...data.map(d => d.position[0])), Math.max(...data.map(d => d.position[0]))]
-    },
-    yaxis: {
-      range: [Math.min(...data.map(d => d.position[1])), Math.max(...data.map(d => d.position[1]))]
-    },
     margin: {
       l: 0,
       r: 0,
@@ -86,13 +81,14 @@ export function embedding_map(data, { width = 700 } = {}) {
     const selectedCategories = Array.from(document.querySelectorAll('.category-filter:checked')).map(el => el.value);
     const sizeBy = document.getElementById('sizeBy').value;
     const searchTerm = document.getElementById('search').value.trim();
+    const embeddingType = document.getElementById('embedding-type').value;
 
     const filteredData = data.filter(d =>
       selectedLanguages.includes(d.language) &&
       selectedCategories.every(category => d.lexeme.includes("<"+category+">"))
     );
 
-    const trace = createTrace(filteredData, sizeBy, searchTerm);
+    const trace = createTrace(filteredData, sizeBy, searchTerm, embeddingType);
     Plotly.react('plotly-chart', [trace], layout, config);
 
     if (searchTerm) {
@@ -123,12 +119,13 @@ export function embedding_map(data, { width = 700 } = {}) {
     filter.addEventListener('change', updatePlot);
   });
 
+  document.getElementById('embedding-type').addEventListener('change', updatePlot);
   document.getElementById('sizeBy').addEventListener('change', updatePlot);
   document.getElementById('search').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
       updatePlot();
     }
-  });
+  });  
 }
 
 // Function to display information in the side panel
