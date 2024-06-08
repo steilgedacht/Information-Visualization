@@ -273,7 +273,9 @@ const data = FileAttachment("./data/vocabulary_dataset.json").json();
       <div><br>
         <h3>Projection method</h3> 
         <select style="width:100%" id="embedding-type" name="choices">
-          <option value="1">Bert-base</option>
+          <option value="1">Bert-base-cased</option>
+          <option value="2">Bert-base-uncased</option>
+          <option value="2">Bert-large-uncased</option>
           <option value="2">Bert-multilanguage</option>
           <option value="3">Clusters</option>
         </select>
