@@ -291,19 +291,18 @@ const category_translate = FileAttachment("./data/lexeme_reference.json").json()
       <div style="margin-bottom:5px"><label><input type="checkbox" class="category-filter" value="@pr:au_dela_de"> @pr:au_dela_de</label></div>
     </div>
   </div> 
-<div class="card">
+  <div class="card">
     <div id="bar-chart">
       ${resize((width) => barChart(data, {width}))}
     </div>
-</div>  
-<div class="card">
+  </div>  
+  <div class="card">
     <h3>Category Distribution</h3>
     <div id="bar-chart-cat">
       ${resize((width) => barChart_categories(data, category_translate, {width}))}
     </div>  
-</div>    
+  </div>    
 </div>
-
 
 
 <div class="grid grid-cols-2" >
