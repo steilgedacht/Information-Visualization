@@ -46,7 +46,6 @@ export function barChart_categories_all(data, { width = 700 } = {}) {
         tickFormat: d => `${d}%`
       },
       y: {
-        label: 'Category',
       },
       width,
       height: 200

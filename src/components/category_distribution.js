@@ -1,6 +1,6 @@
 import * as Plot from "npm:@observablehq/plot";
 
-export function barChart_categories(data, { width = 700 } = {}) {
+export function barChart_categories(data, category_translate, { width = 700 } = {}) {
   const updateChart = () => {
     const selectedLanguages = Array.from(document.querySelectorAll('.language-filter:checked')).map(el => el.value);
     const selectedCategories = Array.from(document.querySelectorAll('.category-filter:checked')).map(el => el.value);
@@ -32,21 +32,24 @@ export function barChart_categories(data, { width = 700 } = {}) {
     
     // Update the chart
     const chartElement = document.getElementById('bar-chart-cat');
+    const chartData_clean = chartData.filter(data => data.name !== "undefined");
+
     chartElement.innerHTML = ''; // Clear previous chart
     const plot = Plot.plot({
       marks: [
-        Plot.barX(chartData.slice(0, 10), {
+        Plot.barX(chartData_clean.slice(0, 10), {
           y: d => d.name,
           x: d => d.value,
           title: d => `${d.name}: ${d.value.toFixed(2)}%`
         })
       ],
       x: {
-        label: 'Language',
-      },
-      y: {
         label: 'Percentage',
         tickFormat: d => `${d}%`
+
+      },
+      y: {
+        tickFormat: d => `${category_translate[d.replace('<','').replace('>','').replace('*','').replace('@','')] || d.replace('<','').replace('>','')}`
       },
       width,
       height: 200

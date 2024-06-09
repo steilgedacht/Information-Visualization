@@ -35,7 +35,6 @@ export function embedding_map(data, { width = 700 } = {}) {
   };  
 
   const createTrace = (filteredData, sizeBy, searchTerm, embeddingType) => {
-    console.log(`position_${embeddingType}`);
     return {
       x: filteredData.map(d => d[`position_${embeddingType}`][0]),
       y: filteredData.map(d => d[`position_${embeddingType}`][1]),
@@ -59,7 +58,7 @@ export function embedding_map(data, { width = 700 } = {}) {
 
   const layout = {
     width: width,
-    height: 700,
+    height: 800,
     plot_bgcolor: '#1e1e1e',
     paper_bgcolor: '#1e1e1e',
     margin: {
