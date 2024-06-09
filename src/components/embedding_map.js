@@ -12,7 +12,7 @@ export function embedding_map(data, { width = 700 } = {}) {
       'pt': '#f04544',
       'it': '#63dc4a'
     };
-    return colorMap[language] || '#cccccc';
+    return colorMap[language] || '#000';
   };
 
   const getSizeMapping = (d, sizeBy, searchTerm) => {
@@ -102,8 +102,11 @@ export function embedding_map(data, { width = 700 } = {}) {
   updatePlot();
 
   document.getElementById('plotly-chart').on('plotly_relayout', function(eventData) {
-    const xRange = Math.abs(eventData['xaxis.range[1]'] - eventData['xaxis.range[0]']);
-    const opacity = Math.pow(1 - (xRange / 15), 16); // Inverse relationship between range and opacity
+    let xRange = Math.abs(eventData['xaxis.range[1]'] - eventData['xaxis.range[0]']);
+    if (isNaN(xRange)) {
+      xRange = 20;
+    } 
+    const opacity = Math.pow(1 - (Math.min(xRange, 20) / 15), 16); // Inverse relationship between range and opacity
 
     Plotly.restyle('plotly-chart', { 'textfont.color': `rgba(255, 255, 255, ${Math.max(0.0, Math.min(opacity, 1))})` });
   });
