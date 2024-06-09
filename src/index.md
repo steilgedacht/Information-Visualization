@@ -42,7 +42,6 @@ const category_translate = FileAttachment("./data/lexeme_reference.json").json()
         <option value="2">Bert-base-uncased</option>
         <option value="3">Bert-large-uncased</option>
         <option value="4">Bert-multilanguage</option>
-        <option value="5">Clusters</option>
       </select>
     </div>
     <div>
@@ -50,10 +49,10 @@ const category_translate = FileAttachment("./data/lexeme_reference.json").json()
       <h3>Size by</h3>
       <select style="width:100%" id="sizeBy" name="sizeBy">
         <option value="none">None</option>
+        <option value="hardness">Difficulity</option>
         <option value="average_performance">Performance</option>
         <option value="average_recall">Recall</option>
         <option value="users_seen">Users that have seen the word</option>
-        <option value="hardness">Difficulity</option>
       </select>
     </div>          
     <br>
